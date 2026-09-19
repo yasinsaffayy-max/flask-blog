@@ -1,0 +1,95 @@
+body {
+    font-family: 'Vazirmatn', -apple-system, sans-serif;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+[data-bs-theme="dark"] body {
+    background-color: #1a1d21;
+}
+
+.post-card {
+    transition: all 0.3s;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+}
+[data-bs-theme="dark"] .post-card {
+    border-color: #333;
+}
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.post-img { height: 200px; object-fit: cover; }
+
+.post-img-placeholder {
+    height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa, #e8ecf1);
+    color: #ccc; font-size: 3rem;
+}
+[data-bs-theme="dark"] .post-img-placeholder {
+    background: linear-gradient(135deg, #2a2d31, #1f2225);
+    color: #555;
+}
+
+.post-body { line-height: 2; font-size: 1.05rem; }
+.post-body img { max-width: 100%; border-radius: 8px; }
+
+.comment-item:last-child { border-bottom: none !important; }
+
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+}
+
+.btn { border-radius: 8px; }
+
+.pagination .page-link {
+    color: #212529;
+    border-radius: 8px;
+    margin: 0 2px;
+    border: none;
+}
+.pagination .page-item.active .page-link {
+    background: #212529;
+    color: white;
+}
+
+.alert { border-radius: 10px; border: none; }
+.breadcrumb { background: transparent; padding: 0; }
+
+/* ===== جستجوی زنده ===== */
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 4px;
+}
+[data-bs-theme="dark"] .search-dropdown {
+    background: #2a2d31;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.search-item {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s;
+}
+[data-bs-theme="dark"] .search-item {
+    border-color: #3a3d41;
+}
+.search-item:last-child { border-bottom: none; }
+.search-item:hover { background: #f8f9fa; }
+[data-bs-theme="dark"] .search-item:hover { background: #35383c; }

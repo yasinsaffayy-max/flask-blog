@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="mb-4 fw-bold">
+                    {% if post %}✏️ ویرایش پست{% else %}➕ پست جدید{% endif %}
+                </h3>
+                <form method="POST" enctype="multipart/form-data" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            {{ form.title.label(class="form-label") }}
+                            {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else ""), id="title-input") }}
+                            {% for e in form.title.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.slug.label(class="form-label") }}
+                            {{ form.slug(class="form-control", placeholder="خالی بذار → خودکار") }}
+                            <small class="text-muted">اگه خالی باشه، از عنوان ساخته میشه</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.summary.label(class="form-label") }}
+                        {{ form.summary(class="form-control", placeholder="یک خلاصه کوتاه (اختیاری)") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.body.label(class="form-label") }}
+                        {{ form.body(class="form-control" + (" is-invalid" if form.body.errors else ""), rows=15, id="body-editor") }}
+                        {% for e in form.body.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.category_id.label(class="form-label") }}
+                            {{ form.category_id(class="form-select") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.comment_mode.label(class="form-label") }}
+                            {{ form.comment_mode(class="form-select") }}
+                            <small class="text-muted">تعیین کن کامنت‌ها چطور باشن</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.image.label(class="form-label") }}
+                        {{ form.image(class="form-control") }}
+                        {% if post and post.image %}
+                            <div class="mt-2">
+                                <img src="{{ url_for('static', filename='uploads/' + post.image) }}" style="max-height: 100px; border-radius: 8px;">
+                                <small class="text-muted d-block">تصویر فعلی</small>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-check mb-3">
+                        {{ form.is_published(class="form-check-input") }}
+                        {{ form.is_published.label(class="form-check-label") }}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        {{ form.submit(class="btn btn-dark") }}
+                        <a href="{{ url_for('admin.posts') }}" class="btn btn-outline-secondary">انصراف</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TinyMCE -->
+<script src="https://cdn.jsdelivr.net/npm/tinymce@6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+tinymce.init({
+    selector: '#body-editor',
+    directionality: 'rtl',
+    language: 'fa',
+    height: 500,
+    menubar: false,
+    plugins: 'lists link image code table',
+    toolbar: 'undo redo | blocks | bold italic underline | alignright aligncenter alignleft | bullist numlist | link image table | code',
+    content_style: 'body { font-family: Vazirmatn, Tahoma, sans-serif; direction: rtl; font-size: 16px; line-height: 2; }',
+    images_upload_url: false,
+    automatic_uploads: false,
+    setup: function(editor) {
+        editor.on('change', function() {
+            editor.save();
+        });
+    }
+});
+
+// auto-slug from title
+document.getElementById('title-input').addEventListener('blur', function() {
+    const slugInput = document.getElementById('slug');
+    if (slugInput.value) return;
+    let slug = this.value.toLowerCase().trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-\u0600-\u06FF]/g, '')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+    slugInput.value = slug;
+});
+</script>
+{% endblock %}

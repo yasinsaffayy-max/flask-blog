@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="fw-bold mb-4">🎛️ داشبورد ادمین</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card bg-dark text-white shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-file-text" style="font-size: 2rem;"></i>
+                <h3 class="mt-2 mb-0">{{ stats.posts }}</h3>
+                <small>کل پست‌ها</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card bg-success text-white shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
+                <h3 class="mt-2 mb-0">{{ stats.published }}</h3>
+                <small>منتشرشده</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card bg-info text-white shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-tags" style="font-size: 2rem;"></i>
+                <h3 class="mt-2 mb-0">{{ stats.categories }}</h3>
+                <small>دسته‌بندی</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card bg-warning text-dark shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-chat-dots" style="font-size: 2rem;"></i>
+                <h3 class="mt-2 mb-0">{{ stats.pending_comments }}</h3>
+                <small>کامنت در انتظار</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex gap-2 mb-4 flex-wrap">
+    <a href="{{ url_for('admin.post_new') }}" class="btn btn-dark"><i class="bi bi-plus-circle"></i> پست جدید</a>
+    <a href="{{ url_for('admin.posts') }}" class="btn btn-outline-dark"><i class="bi bi-list"></i> لیست پست‌ها</a>
+    <a href="{{ url_for('admin.categories') }}" class="btn btn-outline-info"><i class="bi bi-tags"></i> دسته‌بندی‌ها</a>
+    <a href="{{ url_for('admin.comments') }}" class="btn btn-outline-warning"><i class="bi bi-chat-dots"></i> کامنت‌ها</a>
+</div>
+
+<h4 class="mb-3">آخرین پست‌ها</h4>
+{% if recent_posts %}
+    <div class="list-group">
+        {% for p in recent_posts %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ p.title }}</strong>
+                    <br>
+                    <small class="text-muted">{{ p.created_at.strftime('%Y-%m-%d') }} — {{ p.views }} بازدید</small>
+                </div>
+                <div>
+                    {% if p.is_published %}<span class="badge bg-success">منتشر</span>{% else %}<span class="badge bg-secondary">پیش‌نویس</span>{% endif %}
+                    <a href="{{ url_for('admin.post_edit', pid=p.id) }}" class="btn btn-sm btn-outline-primary ms-2">ویرایش</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">هنوز پستی نداری.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h2 class="fw-bold mb-0">💬 مدیریت کامنت‌ها</h2>
+    <div>
+        <a href="{{ url_for('admin.comments') }}" class="btn btn-sm {{ 'btn-dark' if not status_filter else 'btn-outline-dark' }}">همه</a>
+        <a href="{{ url_for('admin.comments', status='pending') }}" class="btn btn-sm {{ 'btn-warning' if status_filter == 'pending' else 'btn-outline-warning' }}">در انتظار</a>
+        <a href="{{ url_for('admin.comments', status='approved') }}" class="btn btn-sm {{ 'btn-success' if status_filter == 'approved' else 'btn-outline-success' }}">تأیید شده</a>
+    </div>
+</div>
+
+{% if comments %}
+    <div class="list-group">
+        {% for c in comments %}
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <strong><i class="bi bi-person-circle"></i> {{ c.author_name }}</strong>
+                        <small class="text-muted">{{ c.author_email }}</small>
+                        {% if c.is_approved %}<span class="badge bg-success">تأیید شده</span>{% else %}<span class="badge bg-warning text-dark">در انتظار</span>{% endif %}
+                    </div>
+                    <small class="text-muted">{{ c.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </div>
+                <p class="mb-2">{{ c.body }}</p>
+                <div class="small mb-2">
+                    در پست: <a href="{{ url_for('post.detail', slug=c.post.slug) }}">{{ c.post.title }}</a>
+                </div>
+                <div class="d-flex gap-1 flex-wrap">
+                    {% if not c.is_approved %}
+                        <form method="POST" action="{{ url_for('admin.comment_approve', cid=c.id) }}" class="d-inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-success"><i class="bi bi-check"></i> تأیید</button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('admin.comment_reject', cid=c.id) }}" class="d-inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-warning"><i class="bi bi-x"></i> لغو تأیید</button>
+                        </form>
+                    {% endif %}
+                    <form method="POST" action="{{ url_for('admin.comment_delete', cid=c.id) }}" onsubmit="return confirm('مطمئنی؟');" class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> حذف</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-chat-dots" style="font-size: 4rem; color: #ccc;"></i>
+        <p class="text-muted mt-3">کامنتی یافت نشد.</p>
+    </div>
+{% endif %}
+{% endblock %}
