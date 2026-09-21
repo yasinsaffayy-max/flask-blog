@@ -30,3 +30,7 @@ app/static/uploads/*
 
 # Misc
 *.log
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover

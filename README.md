@@ -3,6 +3,11 @@
 
 یک وبلاگ کامل و حرفه‌ای با Flask — شامل CRUD پست‌ها، سیستم کامنت‌گذاری هوشمند، پنل ادمین و امکانات مدرن.
 
+[![Tests](https://github.com/yasinsaffayy-max/flask-blog/actions/workflows/tests.yml/badge.svg)](https://github.com/yasinsaffayy-max/flask-blog/actions)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Flask](https://img.shields.io/badge/flask-3.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 ## ✨ امکانات
 
 ### 📚 محتوا
